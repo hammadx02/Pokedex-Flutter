@@ -2,14 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:internship_tasks/utils/colors.dart';
 
-class MyButton extends StatelessWidget {
+import '../utils/colors.dart';
+
+
+class CustomButton extends StatelessWidget {
   String title;
   final VoidCallback onTap;
   Color bgColor, textColor;
   bool loading;
-  MyButton({
+  CustomButton({
     super.key,
     required this.title,
     required this.bgColor,

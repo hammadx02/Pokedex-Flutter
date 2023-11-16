@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/colors.dart';
 import '../utils/utils.dart';
-import '../widgets/buttons.dart';
-import '../widgets/icon_button.dart';
-import '../widgets/text_form_field.dart';
+import '../widgets/custom_buttons.dart';
+
+import '../widgets/custom_text_field.dart';
 import 'login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -95,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  MyTextFormField(
+                  CustomTextField(
                     hintText: 'Email',
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -103,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 12,
                   ),
-                  MyTextFormField(
+                  CustomTextField(
                     hintText: 'Password',
                     controller: passwordController,
                     keyboardType: TextInputType.multiline,
@@ -112,17 +114,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed: () {
                         // iconVisibilityProvider.toggleVisibilty();
                       },
-                      icon: Icon(
-                        iconVisibilityProvider.isVisable
-                            ? Icons.visibility_rounded
-                            : Icons.visibility_off_rounded,
+                      icon: const Icon(
+                        // iconVisibilityProvider.isVisable
+                             Icons.visibility_rounded
+                            // : Icons.visibility_off_rounded,
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  MyButton(
+                  CustomButton(
                     loading: loading,
                     onTap: () {
                       signupUser();

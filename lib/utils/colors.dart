@@ -6,3 +6,5 @@ const myGreyColor = Color(0XFF8391A1);
 const myPrimaryColor = Color(0XFF152238);
 const myBgColor = Color(0XFF192841);
 const myBlackColor = Color(0XFF1E232C);
+FFCC00
+0075BE

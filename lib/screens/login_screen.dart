@@ -1,14 +1,12 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pokedex/screens/signup_screen.dart';
-
 import '../utils/colors.dart';
 import '../utils/utils.dart';
-import '../widgets/buttons.dart';
-import '../widgets/icon_button.dart';
-import '../widgets/text_form_field.dart';
+import '../widgets/custom_buttons.dart';
+import '../widgets/custom_text_field.dart';
 import 'home_screen.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -51,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => HomeScreen(),
           ),
         );
       },
@@ -71,8 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-  
-   
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -102,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 32,
                   ),
-                  MyTextFormField(
+                  CustomTextField(
                     hintText: 'Enter your email',
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
@@ -110,27 +106,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  MyTextFormField(
-                          // isVisable: !iconVisibilityProvider.isVisable,
-                          hintText: 'Enter your password',
-                          controller: passwordController,
-                          keyboardType: TextInputType.emailAddress,
-                          icon: IconButton(
-                            onPressed: () {
-                              iconVisibilityProvider.toggleVisibilty();
-                            },
-                            icon: Icon(
-                              iconVisibilityProvider.isVisable
-                                  ? Icons.visibility_rounded
-                                  : Icons.visibility_off_rounded,
-                            ),
+                  CustomTextField(
+                    // isVisable: !iconVisibilityProvider.isVisable,
+                    hintText: 'Enter your password',
+                    controller: passwordController,
+                    keyboardType: TextInputType.emailAddress,
+                    icon: IconButton(
+                      onPressed: () {
+                        // iconVisibilityProvider.toggleVisibilty();
+                      },
+                      icon: const Icon(
+                          // iconVisibilityProvider.isVisable
+                          Icons.visibility_rounded
+                          // : Icons.visibility_off_rounded,
                           ),
-                        ),
-                
-                 const SizedBox(
+                    ),
+                  ),
+                  const SizedBox(
                     height: 30,
                   ),
-                  MyButton(
+                  CustomButton(
                     loading: loading,
                     onTap: () {
                       // authProvider.addListener(loginUser);
@@ -143,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 35,
                   ),
-                  ],
+                ],
               ),
               Container(
                 alignment: Alignment.center,

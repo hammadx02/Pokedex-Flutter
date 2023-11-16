@@ -2,16 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:internship_tasks/utils/colors.dart';
 
-class MyTextFormField extends StatelessWidget {
+import '../utils/colors.dart';
+
+
+class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final IconButton? icon;
   final TextInputType keyboardType;
   final bool isVisable;
 
-  const MyTextFormField({
+  const CustomTextField({
     super.key,
     required this.hintText,
     required this.controller,
