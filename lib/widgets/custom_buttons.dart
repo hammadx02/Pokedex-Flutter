@@ -5,17 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/colors.dart';
 
-
 class CustomButton extends StatelessWidget {
   String title;
   final VoidCallback onTap;
-  Color bgColor, textColor;
+
   bool loading;
   CustomButton({
     super.key,
     required this.title,
-    required this.bgColor,
-    required this.textColor,
     required this.onTap,
     this.loading = false,
   });
@@ -28,12 +25,9 @@ class CustomButton extends StatelessWidget {
         width: double.infinity,
         height: 56,
         decoration: ShapeDecoration(
-          color: bgColor,
+          color: yellowColor,
           shape: RoundedRectangleBorder(
-            side: const BorderSide(
-              width: 1,
-              color: myBorderColor,
-            ),
+            side: BorderSide.none,
             borderRadius: BorderRadius.circular(8),
           ),
         ),
@@ -46,10 +40,10 @@ class CustomButton extends StatelessWidget {
               : Text(
                   title,
                   style: GoogleFonts.urbanist(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: textColor,
+                      color: myBlackColor,
                     ),
                   ),
                 ),

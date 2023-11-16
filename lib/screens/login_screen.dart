@@ -132,8 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       loginUser();
                     },
                     title: 'Login',
-                    bgColor: myBlackColor,
-                    textColor: Colors.white,
+                    
                   ),
                   const SizedBox(
                     height: 35,

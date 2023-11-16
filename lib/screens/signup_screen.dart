@@ -67,7 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -115,10 +114,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // iconVisibilityProvider.toggleVisibilty();
                       },
                       icon: const Icon(
-                        // iconVisibilityProvider.isVisable
-                             Icons.visibility_rounded
-                            // : Icons.visibility_off_rounded,
-                      ),
+                          // iconVisibilityProvider.isVisable
+                          Icons.visibility_rounded
+                          // : Icons.visibility_off_rounded,
+                          ),
                     ),
                   ),
                   const SizedBox(
@@ -130,14 +129,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       signupUser();
                     },
                     title: 'Sign up',
-                    bgColor: myBlackColor,
-                    textColor: Colors.white,
                   ),
                   const SizedBox(
                     height: 35,
                   ),
-                  
-                 ],
+                ],
               ),
               Container(
                 alignment: Alignment.center,
