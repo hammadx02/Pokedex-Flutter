@@ -67,9 +67,9 @@ flutter {
 
 apply plugin: "com.android.application"
 apply plugin: "com.google.gms.google-services"
-apply plugin: 'com.google.firebase.crashlytics'
+
 
 dependencies {
-    implementation (platform ( "com.google.firebase:firebase-bom:32.5.0" ))
+    implementation ( platform ("com.google.firebase:firebase-bom:32.5.0"))
     
     }

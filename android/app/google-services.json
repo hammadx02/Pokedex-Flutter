@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "929265664612",
-    "project_id": "intership-c19e4",
-    "storage_bucket": "intership-c19e4.appspot.com"
+    "project_number": "332467097313",
+    "project_id": "pokedex-ce76f",
+    "storage_bucket": "pokedex-ce76f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:929265664612:android:50a39d2657fbe69dbb1571",
-        "android_client_info": {
-          "package_name": "com.example.internship_tasks"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAQ64flhewaq0TwBn0xiU99TtZnRAd6LcQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:929265664612:android:c11039574c58c196bb1571",
+        "mobilesdk_app_id": "1:332467097313:android:ae37269f1b286f4e3371a0",
         "android_client_info": {
           "package_name": "com.example.pokedex"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAQ64flhewaq0TwBn0xiU99TtZnRAd6LcQ"
+          "current_key": "AIzaSyDXoJ-w6N9jBtwXY-L2V9hguxwfmdKt75Q"
         }
       ],
       "services": {
