@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../utils/colors.dart';
+import '../constants/colors.dart';
 
 class CustomButton extends StatelessWidget {
   String title;

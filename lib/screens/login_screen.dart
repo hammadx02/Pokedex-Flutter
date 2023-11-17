@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pokedex/screens/signup_screen.dart';
-import '../utils/colors.dart';
+import '../constants/colors.dart';
 import '../utils/utils.dart';
 import '../widgets/custom_buttons.dart';
 import '../widgets/custom_text_field.dart';
@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       },
