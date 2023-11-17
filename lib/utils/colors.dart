@@ -7,4 +7,3 @@ const myPrimaryColor = Color(0XFF152238);
 const myBgColor = Color(0XFF192841);
 const myBlackColor = Color(0XFF1E232C);
 const yellowColor = Color(0XFFFFCC00);
-
