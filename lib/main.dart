@@ -5,7 +5,15 @@ import 'package:pokedex/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    // ignore: prefer_const_constructors
+    options: FirebaseOptions(
+      apiKey: "AIzaSyDXoJ-w6N9jBtwXY-L2V9hguxwfmdKt75Q",
+      appId: "1:332467097313:android:ae37269f1b286f4e3371a0",
+      messagingSenderId: "332467097313",
+      projectId: "pokedex-ce76f",
+    ),
+  );
   runApp(const MyApp());
 }
 
