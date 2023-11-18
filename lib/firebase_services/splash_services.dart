@@ -12,7 +12,7 @@ class SplashServices {
 
     if (user != null) {
       Timer(
-        const Duration(milliseconds: 3000),
+        const Duration(seconds: 3),
         () {
           Navigator.push(
             context,
@@ -24,7 +24,7 @@ class SplashServices {
       );
     } else {
       Timer(
-        const Duration(milliseconds: 3000),
+        const Duration(seconds: 3),
         () {
           Navigator.push(
             context,
