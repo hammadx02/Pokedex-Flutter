@@ -1,60 +1,77 @@
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:pokedex/screens/home_screen.dart';
 
-// class FavouriteScreen extends StatelessWidget {
-//   final List<String> favoriteItems;
+class FavoritesScreen extends StatefulWidget {
+  final List<Pokemon> favoritePokemons;
+  final Function(List<String>) updateFavorites;
+  final Function(Pokemon) removePokemon;
 
-//   const FavouriteScreen({Key? key, required this.favoriteItems, required List<String> favoritePokemonIds}) : super(key: key);
+  const FavoritesScreen({
+    super.key,
+    required this.favoritePokemons,
+    required this.updateFavorites,
+    required this.removePokemon,
+  });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Favorites'),
-//       ),
-//       body: ListView.builder(
-//         itemCount: favoriteItems.length,
-//         itemBuilder: (context, index) {
-//           String pokemonName = favoriteItems[index];
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
 
-//           return Container(
-//             margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(8.0),
-//               gradient: LinearGradient(
-//                 begin: Alignment.topLeft,
-//                 end: Alignment.bottomRight,
-//                 colors: [Colors.blueAccent, Colors.greenAccent],
-//               ),
-//               boxShadow: [
-//                 BoxShadow(
-//                   color: Colors.grey.withOpacity(0.5),
-//                   spreadRadius: 1,
-//                   blurRadius: 5,
-//                   offset: const Offset(0, 2),
-//                 ),
-//               ],
-//             ),
-//             child: ListTile(
-//               leading: CircleAvatar(
-//                 backgroundImage: NetworkImage(
-//                     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png'),
-//               ),
-//               title: Text(
-//                 pokemonName,
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//               trailing: IconButton(
-//                 icon: Icon(Icons.favorite, color: Colors.red),
-//                 onPressed: () {
-//                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//                     content: Text('Removed from Favorites'),
-//                   ));
-//                 },
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 120.0),
+            child: Image.asset(
+              'assets/images/logo.png',
+              scale: 1,
+            ),
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: widget.favoritePokemons.length,
+        itemBuilder: (context, index) {
+          Pokemon pokemon = widget.favoritePokemons[index];
+
+          return Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ListTile(
+              tileColor: Colors.white,
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(pokemon.imageUrl),
+              ),
+              title: Text(pokemon.name),
+              trailing: IconButton(
+                icon: const Icon(Icons.favorite, color: Colors.red),
+                onPressed: () {
+                  setState(() {
+                    widget.favoritePokemons.remove(pokemon);
+                    widget.updateFavorites(widget.favoritePokemons
+                        .map((favPokemon) => favPokemon.name)
+                        .toList());
+                  });
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

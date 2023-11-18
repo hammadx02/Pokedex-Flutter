@@ -1,37 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/screens/home_screen.dart';
 
-class BucketScreen extends StatelessWidget {
-  final List<Pokemon>? bucketItems;
+class BucketScreen extends StatefulWidget {
+  final List<Pokemon> bucketPokemons;
+  final Function(Pokemon) removePokemon;
 
-  const BucketScreen({Key? key, this.bucketItems}) : super(key: key);
+  const BucketScreen({
+    super.key,
+    required this.bucketPokemons,
+    required this.removePokemon,
+  });
 
+  @override
+  State<BucketScreen> createState() => _BucketScreenState();
+}
+
+class _BucketScreenState extends State<BucketScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bucket'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 120.0),
+            child: Image.asset(
+              'assets/images/logo.png',
+              scale: 1,
+            ),
+          ),
+        ],
       ),
       body: ListView.builder(
-        itemCount: bucketItems?.length ?? 0,
+        itemCount: widget.bucketPokemons.length,
         itemBuilder: (context, index) {
-          Pokemon pokemon = bucketItems![index];
+          Pokemon pokemon = widget.bucketPokemons[index];
 
-          return ListTile(
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(pokemon.imageUrl),
+          return Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-            title: Text(
-              pokemon.name,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+            child: ListTile(
+              tileColor: Colors.white,
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(pokemon.imageUrl),
+              ),
+              title: Text(pokemon.name),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () {
+                  setState(() {
+                    widget.bucketPokemons.remove(pokemon);
+                    widget.removePokemon(pokemon);
+                  });
+                },
               ),
             ),
-            subtitle: Text('ID: ${index + 1}'),
-            // ... (add any other details you want to display)
           );
         },
       ),

@@ -1,27 +1,18 @@
-import 'dart:convert';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:pokedex/screens/favourite_screen.dart';
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pokemon App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeScreen(),
-    );
-  }
-}
+import 'bucket_screen.dart';
+import 'favourite_screen.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -39,16 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
     loadPokemons();
   }
 
-  Future<void> loadFavorites() async {
+  Future<void> saveBucketItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      favoritePokemonIds = prefs.getStringList('favorites') ?? [];
-    });
-  }
-
-  Future<void> saveFavorites() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('favorites', favoritePokemonIds);
+    prefs.setStringList('bucketItems', bucketItems);
   }
 
   Future<void> loadBucketItems() async {
@@ -58,9 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> saveBucketItems() async {
+  Future<void> saveFavorites() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('bucketItems', bucketItems);
+    prefs.setStringList('favorites', favoritePokemonIds);
+  }
+
+  Future<void> loadFavorites() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      favoritePokemonIds = prefs.getStringList('favorites') ?? [];
+    });
   }
 
   Future<void> loadPokemons() async {
@@ -87,149 +78,213 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _removePokemonFromBucket(Pokemon pokemon) {
+    setState(() {
+      bucketItems.remove(pokemon.name);
+      saveBucketItems();
+    });
+  }
+
+  void _updateFavorites(List<String> updatedFavorites) {
+    setState(() {
+      favoritePokemonIds = updatedFavorites;
+      saveFavorites();
+    });
+  }
+
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Pokemon App'),
         actions: [
-          IconButton(
-            icon: Stack(
-              children: [
-                Icon(Icons.shopping_cart),
-                if (bucketItems.isNotEmpty)
-                  Positioned(
-                    right: 0,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 8,
-                      child: Text(
-                        bucketItems.length.toString(),
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BucketScreen(bucketItems: bucketItems),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: pokemons.length,
-        itemBuilder: (context, index) {
-          Pokemon pokemon = pokemons[index];
-          bool isFavorite = favoritePokemonIds.contains(pokemon.name);
-          bool isAddedToBucket = bucketItems.contains(pokemon.name);
-
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.blueAccent, Colors.greenAccent],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(pokemon.imageUrl),
-              ),
-              title: Text(
-                pokemon.name,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+          Stack(
+            children: [
+              Row(
                 children: [
                   IconButton(
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : null,
-                    ),
-                    onPressed: () {
+                    icon: const Icon(Icons.logout),
+                    onPressed: () async {
+                      // Clear bucketItems upon logout
                       setState(() {
-                        if (isFavorite) {
-                          favoritePokemonIds.remove(pokemon.name);
-                        } else {
-                          favoritePokemonIds.add(pokemon.name);
-                        }
-                        saveFavorites();
+                        bucketItems.clear();
+                        saveBucketItems();
                       });
+
+                      await FirebaseAuth.instance.signOut();
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.add_shopping_cart),
+                    icon: const Icon(Icons.shopping_cart),
                     onPressed: () {
-                      setState(() {
-                        if (!isAddedToBucket) {
-                          bucketItems.add(pokemon.name);
-                          saveBucketItems();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Added to Bucket'),
-                          ));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Already Added to Bucket'),
-                          ));
-                        }
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BucketScreen(
+                            bucketPokemons: pokemons
+                                .where((pokemon) =>
+                                    bucketItems.contains(pokemon.name))
+                                .toList(),
+                            removePokemon: _removePokemonFromBucket,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ],
               ),
-            ),
-          );
-        },
+              if (bucketItems.isNotEmpty)
+                Positioned(
+                  right: 0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 10,
+                    child: Text(
+                      bucketItems.length.toString(),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.shopping_cart),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BucketScreen(bucketItems: bucketItems),
-            ),
-          );
-        },
+      body: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 8.0,
+            mainAxisSpacing: 8.0,
+          ),
+          itemCount: pokemons.length,
+          itemBuilder: (context, index) {
+            Pokemon pokemon = pokemons[index];
+            bool isFavorite = favoritePokemonIds.contains(pokemon.name);
+            bool isInBucket = bucketItems.contains(pokemon.name);
+
+            return InkWell(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      child: Image.network(
+                        pokemon.imageUrl,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      pokemon.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : null,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (isFavorite) {
+                                favoritePokemonIds.remove(pokemon.name);
+                              } else {
+                                favoritePokemonIds.add(pokemon.name);
+                              }
+                              saveFavorites();
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            isInBucket
+                                ? Icons.shopping_cart
+                                : Icons.add_shopping_cart,
+                            color: isInBucket ? Colors.green : null,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (!bucketItems.contains(pokemon.name)) {
+                                bucketItems.add(pokemon.name);
+                                saveBucketItems();
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.favorite),
-              onPressed: () {
+      bottomNavigationBar: SizedBox(
+        height: 150,
+        child: DotNavigationBar(
+          enableFloatingNavBar: true,
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+              if (index == 1) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FavouriteScreen(favoritePokemonIds: favoritePokemonIds, favoriteItems: [],),
+                    builder: (context) => FavoritesScreen(
+                      favoritePokemons: pokemons
+                          .where((pokemon) =>
+                              favoritePokemonIds.contains(pokemon.name))
+                          .toList(),
+                      updateFavorites: _updateFavorites,
+                      removePokemon: _removePokemonFromBucket,
+                    ),
                   ),
                 );
-              },
+              }
+            });
+          },
+          items: [
+            DotNavigationBarItem(
+              icon: const Icon(Icons.home),
+              selectedColor: Colors.blue,
+            ),
+            DotNavigationBarItem(
+              icon: const Icon(Icons.favorite),
+              selectedColor: Colors.red,
             ),
           ],
         ),
@@ -242,126 +297,5 @@ class Pokemon {
   final String name;
   final String imageUrl;
 
-  Pokemon({
-    required this.name,
-    required this.imageUrl,
-  });
-}
-
-class BucketScreen extends StatelessWidget {
-  final List<String> bucketItems;
-
-  const BucketScreen({Key? key, required this.bucketItems}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Bucket'),
-      ),
-      body: ListView.builder(
-        itemCount: bucketItems.length,
-        itemBuilder: (context, index) {
-          String pokemonName = bucketItems[index];
-
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.blueAccent, Colors.greenAccent],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png'),
-              ),
-              title: Text(
-                pokemonName,
-                style: TextStyle(color: Colors.white),
-              ),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Removed from Bucket'),
-                  ));
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class FavouriteScreen extends StatelessWidget {
-  final List<String> favoriteItems;
-
-  const FavouriteScreen({Key? key, required this.favoriteItems, required List<String> favoritePokemonIds}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Favorites'),
-      ),
-      body: ListView.builder(
-        itemCount: favoriteItems.length,
-        itemBuilder: (context, index) {
-          String pokemonName = favoriteItems[index];
-
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.blueAccent, Colors.greenAccent],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index + 1}.png'),
-              ),
-              title: Text(
-                pokemonName,
-                style: TextStyle(color: Colors.white),
-              ),
-              trailing: IconButton(
-                icon: Icon(Icons.favorite, color: Colors.red),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Removed from Favorites'),
-                  ));
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  Pokemon({required this.name, required this.imageUrl});
 }
