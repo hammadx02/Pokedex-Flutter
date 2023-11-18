@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.yellow,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.yellow,
+        ),
       ),
       home: const SplashScreen(),
     );

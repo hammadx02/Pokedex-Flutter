@@ -1,10 +1,7 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../constants/colors.dart';
-
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
@@ -29,7 +26,6 @@ class CustomTextField extends StatelessWidget {
       obscureText: isVisable,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        // prefixIcon: Icon(prefixIcon),
         hintText: hintText,
         hintStyle: GoogleFonts.urbanist(
           textStyle: const TextStyle(
@@ -44,6 +40,12 @@ class CustomTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Color(0XFFE8ECF4),
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: yellowColor,
           ),
           borderRadius: BorderRadius.circular(8),
         ),

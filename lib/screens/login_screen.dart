@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) =>  HomeScreen(),
           ),
         );
       },
@@ -71,19 +71,25 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  height: 150,
+                  width: double.infinity,
+                ),
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
-                      top: 85.0,
+                      top: 10.0,
                     ),
                     child: Text(
                       'Login',
@@ -107,19 +113,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 15,
                   ),
                   CustomTextField(
-                    // isVisable: !iconVisibilityProvider.isVisable,
                     hintText: 'Enter your password',
                     controller: passwordController,
                     keyboardType: TextInputType.emailAddress,
                     icon: IconButton(
-                      onPressed: () {
-                        // iconVisibilityProvider.toggleVisibilty();
-                      },
-                      icon: const Icon(
-                          // iconVisibilityProvider.isVisable
-                          Icons.visibility_rounded
-                          // : Icons.visibility_off_rounded,
-                          ),
+                      onPressed: () {},
+                      icon: const Icon(Icons.visibility_rounded),
                     ),
                   ),
                   const SizedBox(
@@ -128,14 +127,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomButton(
                     loading: loading,
                     onTap: () {
-                      // authProvider.addListener(loginUser);
                       loginUser();
                     },
                     title: 'Login',
-                    
                   ),
                   const SizedBox(
-                    height: 35,
+                    height: 20,
                   ),
                 ],
               ),
@@ -169,6 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Sign up',
                         style: GoogleFonts.urbanist(
                           textStyle: const TextStyle(
+                            color: yellowColor,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),

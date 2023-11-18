@@ -69,71 +69,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 85.0,
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  height: 150,
+                  width: double.infinity,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 10.0,
+                ),
+                child: Text(
+                  'Sign Up',
+                  style: GoogleFonts.urbanist(
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
                     ),
-                    child: Text(
-                      'Sign Up',
-                      style: GoogleFonts.urbanist(
-                        textStyle: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              CustomTextField(
+                hintText: 'Email',
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              CustomTextField(
+                hintText: 'Password',
+                controller: passwordController,
+                keyboardType: TextInputType.multiline,
+                // isVisable: !iconVisibilityProvider.isVisable,
+                icon: IconButton(
+                  onPressed: () {
+                    // iconVisibilityProvider.toggleVisibilty();
+                  },
+                  icon: const Icon(
+                      // iconVisibilityProvider.isVisable
+                      Icons.visibility_rounded
+                      // : Icons.visibility_off_rounded,
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  CustomTextField(
-                    hintText: 'Email',
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  CustomTextField(
-                    hintText: 'Password',
-                    controller: passwordController,
-                    keyboardType: TextInputType.multiline,
-                    // isVisable: !iconVisibilityProvider.isVisable,
-                    icon: IconButton(
-                      onPressed: () {
-                        // iconVisibilityProvider.toggleVisibilty();
-                      },
-                      icon: const Icon(
-                          // iconVisibilityProvider.isVisable
-                          Icons.visibility_rounded
-                          // : Icons.visibility_off_rounded,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  CustomButton(
-                    loading: loading,
-                    onTap: () {
-                      signupUser();
-                    },
-                    title: 'Sign up',
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                ],
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                loading: loading,
+                onTap: () {
+                  signupUser();
+                },
+                title: 'Sign up',
+              ),
+              const SizedBox(
+                height: 20,
               ),
               Container(
                 alignment: Alignment.center,
@@ -165,6 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         'Login Now',
                         style: GoogleFonts.urbanist(
                           textStyle: const TextStyle(
+                            color: yellowColor,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
