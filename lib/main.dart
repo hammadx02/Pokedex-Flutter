@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
     );
     return MaterialApp(
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.yellow,
         textSelectionTheme: const TextSelectionThemeData(
